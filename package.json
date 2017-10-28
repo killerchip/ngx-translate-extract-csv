@@ -1,0 +1,14 @@
+{
+  "name": "ngx-translate-extract-csv",
+  "version": "0.1.0",
+  "description": "Convert ngx-translate-extract translation files to and from CSV",
+  "main": "ngx-translate-extract-csv.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dot-object": "^1.7.0"
+  }
+}
