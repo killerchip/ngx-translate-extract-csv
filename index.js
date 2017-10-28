@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var dot = require("dot-object");
 var fs = require('fs');
 
