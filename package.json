@@ -12,6 +12,6 @@
     "dot-object": "1.7.0"
   },
   "bin": {
-    "ngx-translate-extract-csv": "./index.js"
+    "ngx-translate-extract-csv": "index.js"
   }
 }
