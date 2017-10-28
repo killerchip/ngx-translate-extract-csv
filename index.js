@@ -3,11 +3,24 @@
 var dot = require("dot-object");
 var fs = require('fs');
 
+var usageMessage = `
+Merge JSON files created with ngx-translate-extract to a single CSV file.
+--------
+Usage:
+  ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>]
+  ngx-translate-extract-csv -h | --help
+
+  Options:
+    <languages>   : comma separated values of the input json files. Assumes .json extension
+    <input path>  : location of the .json files. Default "./src/assets/i18n"
+    <output path> : the path of the output file. If ommited the results are printed in screen only.
+`;
+
 function getArguments() {
   let params = {};
   for (let i = 2; i < process.argv.length; i++) {
     if (process.argv[i].substring(0, 1) === "-") {
-      if (process.argv[i + 1].substring(0, 1) !== "-") {
+      if ( typeof process.argv[i + 1] !== "undefined" && process.argv[i + 1].substring(0, 1) !== "-") {
         params[process.argv[i].substring(1)] = process.argv[i + 1];
       } else {
         params[process.argv[i].substring(1)] = null;
@@ -31,9 +44,13 @@ function injectLangObject(lang, langObj, tableObj) {
   }
 }
 
-var usageMessage = `Error`;
-
 let params = getArguments();
+
+if (params.hasOwnProperty("h") || params.hasOwnProperty("-help")) {
+  console.log(usageMessage);
+  process.exit(1);
+}
+
 let sourcePath = params["i"] || "./src/assets/i18n";
 let destinationPath = params["o"];
 let langsArg = params["l"];
