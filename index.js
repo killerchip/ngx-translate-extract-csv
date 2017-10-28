@@ -6,23 +6,15 @@ var fs = require('fs');
 function getArguments() {
   let params = {};
   for (let i = 2; i < process.argv.length; i++) {
-    if (process.argv[i].substring(0, 2) === "--") {
-      if (process.argv[i + 1].substring(0, 2) !== "--") {
-        params[process.argv[i].substring(2)] = process.argv[i + 1];
+    if (process.argv[i].substring(0, 1) === "-") {
+      if (process.argv[i + 1].substring(0, 1) !== "-") {
+        params[process.argv[i].substring(1)] = process.argv[i + 1];
       } else {
-        params[process.argv[i].substring(2)] = null;
+        params[process.argv[i].substring(1)] = null;
       }
     }
   }
   return params;
-}
-
-function getParam(param, params) {
-  if (params[param]) {
-    return params[param];
-  } else {
-    return null;
-  }
 }
 
 function injectLangObject(lang, langObj, tableObj) {
@@ -39,23 +31,24 @@ function injectLangObject(lang, langObj, tableObj) {
   }
 }
 
+var usageMessage = `Error`;
+
 let params = getArguments();
-let sourcePath = getParam("source", params);
-let destinationPath = getParam("destination", params);
-let languages = getParam("languages", params).split(",");
+let sourcePath = params["i"] || "./src/assets/i18n";
+let destinationPath = params["o"];
+let langsArg = params["l"];
 
-if (sourcePath === null) {
-  console.log("Source path parameter is missing");
+if (
+  typeof sourcePath !== "string" || sourcePath === ""
+  || typeof langsArg !== "string" || langsArg === ""
+  ) {
+  console.log(usageMessage);
   process.exit(1);
 }
 
-if (destinationPath === null) {
-  console.log("Destination path parameter is missing");
-  process.exit(1);
-}
-
-if (languages === null) {
-  console.log("Languages specification is missing");
+let languages = langsArg.split(",");
+if (!Array.isArray(languages) || languages.length === 0) {
+  console.log(usageMessage);
   process.exit(1);
 }
 
@@ -66,11 +59,11 @@ for (i = 0; i < languages.length; i++) {
   injectLangObject(languages[i], langObj, tableObj);
 }
 
-
-
-var outputFile = fs.createWriteStream(destinationPath, {
-  flags: 'w'
-})
+if (typeof destinationPath === "string") {
+  var outputFile = fs.createWriteStream(destinationPath, {
+    flags: 'w'
+  })  
+}
 
 //Print the CSV
 let header = '"termID"';
@@ -78,7 +71,9 @@ for (let lang of languages) {
     header +=","+`"${lang}"`;
 }
 console.log(header);
-outputFile.write(header);
+if (typeof destinationPath === "string") {
+  outputFile.write(header);
+}
 let terms = Object.keys(tableObj);
 for (let term of terms) {
     let line = `"${term}"`;
@@ -86,9 +81,14 @@ for (let term of terms) {
         line += `,"${tableObj[term][lang]}"`;
     }
     console.log(line);
-    outputFile.write(line+"\n");
+    if (typeof destinationPath === "string") {
+      outputFile.write(line+"\n");
+    }
 }
-outputFile.end();
+
+if (typeof destinationPath === "string") {
+  outputFile.end();
+}
 
 
 
