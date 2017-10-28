@@ -89,7 +89,7 @@ for (let lang of languages) {
 }
 console.log(header);
 if (typeof destinationPath === "string") {
-  outputFile.write(header);
+  outputFile.write(header+"\n");
 }
 let terms = Object.keys(tableObj);
 for (let term of terms) {
