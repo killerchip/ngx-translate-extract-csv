@@ -4,6 +4,8 @@ const version = "0.1.0";
 var dot = require("dot-object");
 var fs = require('fs');
 
+var basepath = process.cwd();
+
 var usageMessage = `
 Merge JSON files created with ngx-translate-extract to a single CSV file.
 --------
@@ -78,7 +80,7 @@ if (!Array.isArray(languages) || languages.length === 0) {
 // Read source files into a single CSV-ready object
 let tableObj = {};
 for (i = 0; i < languages.length; i++) {
-  let langObj = require(sourcePath + "/" + languages[i] + ".json");
+  let langObj = require(basepath + "/" + sourcePath + "/" + languages[i] + ".json");
   injectLangObject(languages[i], langObj, tableObj);
 }
 
