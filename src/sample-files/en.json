@@ -1,7 +1,7 @@
 {
     "prop1": {
         "prop2": {
-            "prop3": "english-string"
+            "prop3": "english, string"
         }
     },
     "root": "root",

@@ -9,6 +9,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "dot-object": "^1.7.0"
+    "dot-object": "1.7.0"
   }
 }

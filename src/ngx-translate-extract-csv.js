@@ -1,4 +1,5 @@
 var dot = require("dot-object");
+var fs = require('fs');
 
 function getArguments() {
   let params = {};
@@ -34,22 +35,8 @@ function injectLangObject(lang, langObj, tableObj) {
           tableObj[key][lang] = source;
       }
   }
-  //Object.assign(tableObj, flatenedObj);
 }
 
-/*
-function flaten(language, sourceObj) {
-  let result = dot.dot(sourceObj);
-  let keys = Object.keys(result);
-  for (let key of keys) {
-    let val = result[key];
-    result[key] = {};
-    result[key][language] = val;
-  }
-  return result;
-}
-*/
-// Process parameters
 let params = getArguments();
 let sourcePath = getParam("source", params);
 let destinationPath = getParam("destination", params);
@@ -70,10 +57,37 @@ if (languages === null) {
   process.exit(1);
 }
 
-// Read source files
+// Read source files into a single CSV-ready object
 let tableObj = {};
 for (i = 0; i < languages.length; i++) {
   let langObj = require(sourcePath + "/" + languages[i] + ".json");
   injectLangObject(languages[i], langObj, tableObj);
 }
-console.log(tableObj);
+
+
+
+var outputFile = fs.createWriteStream(destinationPath, {
+  flags: 'w'
+})
+
+//Print the CSV
+let header = '"termID"';
+for (let lang of languages) {
+    header +=","+`"${lang}"`;
+}
+console.log(header);
+outputFile.write(header);
+let terms = Object.keys(tableObj);
+for (let term of terms) {
+    let line = `"${term}"`;
+    for (let lang of languages) {
+        line += `,"${tableObj[term][lang]}"`;
+    }
+    console.log(line);
+    outputFile.write(line+"\n");
+}
+outputFile.end();
+
+
+
+
