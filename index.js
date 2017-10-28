@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const version = "0.1.0";
 
 var dot = require("dot-object");
 var fs = require('fs');
@@ -48,7 +49,12 @@ let params = getArguments();
 
 if (params.hasOwnProperty("h") || params.hasOwnProperty("-help")) {
   console.log(usageMessage);
-  process.exit(1);
+  process.exit(0);
+}
+
+if (params.hasOwnProperty("v") || params.hasOwnProperty("-version")) {
+  console.log("version: "+version);
+  process.exit(0);
 }
 
 let sourcePath = params["i"] || "./src/assets/i18n";
