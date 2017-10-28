@@ -66,13 +66,13 @@ if (
   || typeof langsArg !== "string" || langsArg === ""
   ) {
   console.log(usageMessage);
-  process.exit(1);
+  process.exit(0);
 }
 
 let languages = langsArg.split(",");
 if (!Array.isArray(languages) || languages.length === 0) {
   console.log(usageMessage);
-  process.exit(1);
+  process.exit(0);
 }
 
 // Read source files into a single CSV-ready object
