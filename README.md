@@ -1,4 +1,4 @@
-#ngx-translate-extract-csv
+# ngx-translate-extract to CSV
 
 Merges the .json files created by ngx-translate-extract into a single CSV file. It helps with providing an
 format that can be easier handled by the translators.
