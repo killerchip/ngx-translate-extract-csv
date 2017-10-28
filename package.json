@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-extract-csv",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Convert ngx-translate-extract translation files to and from CSV",
   "main": "index.js",
   "scripts": {
