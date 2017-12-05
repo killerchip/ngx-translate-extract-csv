@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-extract-csv",
-  "version": "0.1.1",
+  "version": "0.2",
   "description": "Convert ngx-translate-extract translation files to CSV",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,8 @@
   "author": "Costas Ioannou (killerchip)",
   "license": "MIT",
   "dependencies": {
-    "dot-object": "1.7.0"
+    "dot-object": "1.7.0",
+    "fast-csv": "^2.4.1"
   },
   "keywords": [
     "ngx-translate-extract",
@@ -18,11 +19,11 @@
     "localization",
     "i18n"
   ],
-  "repository" : { 
-    "type" : "git",
-    "url" : "git+https://github.com/killerchip/ngx-translate-extract-csv.git"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/killerchip/ngx-translate-extract-csv.git"
   },
-  "homepage" : "https://github.com/killerchip/ngx-translate-extract-csv/#readme",
+  "homepage": "https://github.com/killerchip/ngx-translate-extract-csv/#readme",
   "bugs": {
     "url": "https://github.com/killerchip/ngx-translate-extract-csv/issues"
   },

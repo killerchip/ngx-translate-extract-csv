@@ -1,7 +1,9 @@
 # ngx-translate-extract to CSV
 
-Merges the .json files created by ngx-translate-extract into a single CSV file. It helps with providing an
-format that can be easier handled by the translators.
+* Merges the .json files created by ngx-translate-extract into a single CSV file. 
+* Splits the translated CSV file into separate .json files to be taken into use.
+
+It helps with providing a format that can be easier handled by people that will perform the translation.
 
 _Note:_ It works only with files that were created separated, one .json file per language.
 
@@ -65,13 +67,20 @@ scripts: {
 ## Usage
 
 ```
+Usage:
   ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>]
+  ngx-translate-extract-csv -r -i <input csv file> [-o <output path>]
   ngx-translate-extract-csv -h | --help
+  ngx-translate-extract-csv -v | --version
 
   Options:
     <languages>   : comma separated values of the input json files. Assumes .json extension
     <input path>  : location of the .json files. Default "./src/assets/i18n"
     <output path> : the path of the output file. If ommited the results are printed in screen only.
+
+    -r : Reverse operation. Split a CSV file to multiple JSON files.
+    <input csv file>  : The CSV file to be processed
+    <output path>     : The target folder in wich the .json files will be created. Default "./src/assets/i18n"
 ```
 
 **Example:** Base usage
@@ -93,6 +102,14 @@ ngx-translate-extract-csv -o extracted/translation.csv -l en,el
 ```
 ngx-translate-extract-csv -i ./lang-files -o ./output.csv -l en,el
 ```
+
+**Example:** Splitting the CSV into json files.
+We assume that input file is `./translation.csv` and we wish to output our files to `./tranlatedJson` folder.
+
+```
+ngx-translate-extract-csv -r -i ./translation.csv -o ./translatedJson
+```
+
 
 ## License
 
