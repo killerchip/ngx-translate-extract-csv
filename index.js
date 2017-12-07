@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const version = "0.2";
+const version = "1.0.0";
 
 var dot = require("dot-object");
 var fs = require('fs');
