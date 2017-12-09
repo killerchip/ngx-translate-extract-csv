@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const version = "1.0.0";
+const version = "1.1.0";
 
 var dot = require("dot-object");
 var fs = require('fs');
@@ -11,8 +11,8 @@ var usageMessage = `
 Merge JSON files created with ngx-translate-extract to a single CSV file and vice versa.
 --------
 Usage:
-  ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>]
-  ngx-translate-extract-csv -r -i <input csv file> [-o <output path>]
+  ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>] [-s <separator>]
+  ngx-translate-extract-csv -r -i <input csv file> [-o <output path>] [-s <separator>]
   ngx-translate-extract-csv -h | --help
   ngx-translate-extract-csv -v | --version
 
@@ -20,6 +20,7 @@ Usage:
     <languages>   : comma separated values of the input json files. Assumes .json extension
     <input path>  : location of the .json files. Default "./src/assets/i18n"
     <output path> : the path of the output file. If ommited the results are printed in screen only.
+    <separator>   : the separator character. Must be 1 character long. Defaults to "," (comma) separator.
 
     -r : Reverse operation. Split a CSV file to multiple JSON files.
     <input csv file>  : The CSV file to be processed
@@ -70,6 +71,11 @@ if (params.hasOwnProperty("v") || params.hasOwnProperty("-version")) {
   process.exit(0);
 }
 
+var delimiter = params["s"] ? params["s"] : ",";
+if (delimiter.length > 1) {
+  console.log('Delimiter must be 1 character long');
+  process.exit(1);
+}
 
 if (params.hasOwnProperty("r")) {
 
@@ -89,7 +95,7 @@ if (params.hasOwnProperty("r")) {
     //Reading the stream
     let allLangsObject = {};
     csv
-    .fromPath(`${basepath}/${sourcePath}`, {headers: true, ignoreEmpty: true})
+    .fromPath(`${basepath}/${sourcePath}`, {headers: true, ignoreEmpty: true, delimiter: delimiter})
     .on("data", function(data){
         //mix lines into a flat-object with 'lang' prepending the termId
         let termId=data["termID"];
@@ -162,7 +168,7 @@ if (params.hasOwnProperty("r")) {
   //Print the CSV
   let header = '"termID"';
   for (let lang of languages) {
-      header +=","+`"${lang}"`;
+      header +=`${delimiter}"${lang}"`;
   }
   console.log(header);
   if (typeof destinationPath === "string") {
@@ -172,7 +178,7 @@ if (params.hasOwnProperty("r")) {
   for (let term of terms) {
       let line = `"${term}"`;
       for (let lang of languages) {
-          line += `,"${tableObj[term][lang]}"`;
+          line += `${delimiter}"${tableObj[term][lang]}"`;
       }
       console.log(line);
       if (typeof destinationPath === "string") {

@@ -68,8 +68,11 @@ scripts: {
 
 ```
 Usage:
-  ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>]
-  ngx-translate-extract-csv -r -i <input csv file> [-o <output path>]
+Merge JSON files created with ngx-translate-extract to a single CSV file and vice versa.
+--------
+Usage:
+  ngx-translate-extract-csv -l <languages> [-i <input path>] [-o <output path>] [-s <separator>]
+  ngx-translate-extract-csv -r -i <input csv file> [-o <output path>] [-s <separator>]
   ngx-translate-extract-csv -h | --help
   ngx-translate-extract-csv -v | --version
 
@@ -77,6 +80,7 @@ Usage:
     <languages>   : comma separated values of the input json files. Assumes .json extension
     <input path>  : location of the .json files. Default "./src/assets/i18n"
     <output path> : the path of the output file. If ommited the results are printed in screen only.
+    <separator>   : the separator character. Must be 1 character long. Defaults to "," (comma) separator.
 
     -r : Reverse operation. Split a CSV file to multiple JSON files.
     <input csv file>  : The CSV file to be processed
