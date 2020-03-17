@@ -45,13 +45,13 @@ function injectLangObject(lang, langObj, tableObj) {
   let flatened = dot.dot(langObj);
   let keys = Object.keys(flatened);
   for (let key of keys) {
-      let source = flatened[key];
-      if (typeof tableObj[key] !== "undefined") {
-          tableObj[key][lang] = source;
-      } else {
-          tableObj[key] = {};
-          tableObj[key][lang] = source;
-      }
+    let source = flatened[key];
+    if (typeof tableObj[key] !== "undefined") {
+      tableObj[key][lang] = source;
+    } else {
+      tableObj[key] = {};
+      tableObj[key][lang] = source;
+    }
   }
 }
 
@@ -95,32 +95,33 @@ if (params.hasOwnProperty("r")) {
     //Reading the stream
     let allLangsObject = {};
     csv
-    .fromPath(`${basepath}/${sourcePath}`, {headers: true, ignoreEmpty: true, delimiter: delimiter})
-    .on("data", function(data){
-        //mix lines into a flat-object with 'lang' prepending the termId
-        let termId=data["termID"];
-        for (let key in data) {
-          let dataval=data[key];
-          if (key!=="termID") {
-            allLangsObject[`${key}.${termId}`] = dataval;
+        .fromPath(`${basepath}/${sourcePath}`, {headers: true, ignoreEmpty: true, delimiter: delimiter})
+        .on("data", function(data){
+          //mix lines into a flat-object with 'lang' prepending the termId
+          let termId=data["termID"];
+          for (let key in data) {
+            let dataval=data[key];
+            if (key!=="termID") {
+              const isStringNullOrUndefined=dataval==="undefined" || dataval==="null"
+              allLangsObject[`${key}.${termId}`] =isStringNullOrUndefined? null: dataval;
+            }
           }
-        }
-    })
-    .on("end", function(){
-      //Give depth to the flat-object. 1st level of properties of the object are each language
-      let depthedAllLangsObject = dot.object(allLangsObject);
-      for (let lang in depthedAllLangsObject) {
-        //write language specific object to language file
-        let filepath = `${basepath}/${destinationPath}/${lang}.json`;
-        var outputFile = fs.createWriteStream(filepath, {
-          flags: 'w'
+        })
+        .on("end", function(){
+          //Give depth to the flat-object. 1st level of properties of the object are each language
+          let depthedAllLangsObject = dot.object(allLangsObject);
+          for (let lang in depthedAllLangsObject) {
+            //write language specific object to language file
+            let filepath = `${basepath}/${destinationPath}/${lang}.json`;
+            var outputFile = fs.createWriteStream(filepath, {
+              flags: 'w'
+            });
+            console.log(`Creating: ${filepath}`);
+            outputFile.write(JSON.stringify(depthedAllLangsObject[lang],null,'\t'));
+            outputFile.end();
+          }
+          console.log('Done...');
         });
-        console.log(`Creating: ${filepath}`);
-        outputFile.write(JSON.stringify(depthedAllLangsObject[lang],null,'\t'));
-        outputFile.end();
-      }
-      console.log('Done...');
-    });
 
   } else {
     console.log(usageMessage);
@@ -128,7 +129,7 @@ if (params.hasOwnProperty("r")) {
   }
   let sourcePath = params["i"] || "./src/assets/i18n";
   let destinationPath = params["o"];
-  let langsArg = params["l"];  
+  let langsArg = params["l"];
 
 } else {
 
@@ -139,9 +140,9 @@ if (params.hasOwnProperty("r")) {
   let langsArg = params["l"];
 
   if (
-    typeof sourcePath !== "string" || sourcePath === ""
-    || typeof langsArg !== "string" || langsArg === ""
-    ) {
+      typeof sourcePath !== "string" || sourcePath === ""
+      || typeof langsArg !== "string" || langsArg === ""
+  ) {
     console.log(usageMessage);
     process.exit(0);
   }
@@ -162,13 +163,13 @@ if (params.hasOwnProperty("r")) {
   if (typeof destinationPath === "string") {
     var outputFile = fs.createWriteStream(destinationPath, {
       flags: 'w'
-    })  
+    })
   }
 
   //Print the CSV
   let header = '"termID"';
   for (let lang of languages) {
-      header +=`${delimiter}"${lang}"`;
+    header +=`${delimiter}"${lang}"`;
   }
   console.log(header);
   if (typeof destinationPath === "string") {
@@ -176,14 +177,14 @@ if (params.hasOwnProperty("r")) {
   }
   let terms = Object.keys(tableObj);
   for (let term of terms) {
-      let line = `"${term}"`;
-      for (let lang of languages) {
-          line += `${delimiter}"${tableObj[term][lang]}"`;
-      }
-      console.log(line);
-      if (typeof destinationPath === "string") {
-        outputFile.write(line+"\n");
-      }
+    let line = `"${term}"`;
+    for (let lang of languages) {
+      line += `${delimiter}"${tableObj[term][lang]}"`;
+    }
+    console.log(line);
+    if (typeof destinationPath === "string") {
+      outputFile.write(line+"\n");
+    }
   }
 
   if (typeof destinationPath === "string") {
@@ -191,8 +192,3 @@ if (params.hasOwnProperty("r")) {
   }
 
 }
-
-
-
-
-
